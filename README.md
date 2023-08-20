@@ -1,2 +1,2 @@
 # unln
-This tool removes only symbolic links.
+This tool can erase only symbolic links, which is a bit safer than unlink.
