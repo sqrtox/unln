@@ -1,0 +1,13 @@
+[package]
+name = "unln"
+version = "0.1.0"
+edition = "2021"
+authors = ["sqrtox"]
+license = "MIT"
+description = "This tool can erase only symbolic links, which is a bit safer than unlink."
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.3.23", features = ["derive"] }
+colored = "2.0.4"
