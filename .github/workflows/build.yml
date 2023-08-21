@@ -77,7 +77,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref }}
-          rname: Release ${{ github.ref }}
+          name: Release ${{ github.ref }}
           draft: false
           prerelease: true
       - run: |
