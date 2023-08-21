@@ -84,7 +84,7 @@ jobs:
           echo '${{ steps.create_release.outputs.upload_url }}' > release_upload_url.txt
       - uses: actions/upload-artifact@v1
         with:
-          name: create_release
+          name: create-release
           path: release_upload_url.txt
 
   upload_release:
@@ -99,7 +99,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v1
         with:
-          name: create_release
+          name: create-release
       - id: upload_url
         run: |
           echo "url=$(cat create_release/release_upload_url.txt)" | tee -a $GITHUB_OUTPUT
