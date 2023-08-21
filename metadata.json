@@ -1,0 +1,85 @@
+{
+  "packages": [
+    {
+      "name": "unln",
+      "version": "0.1.0",
+      "id": "unln 0.1.0 (path+file:///home/sqrtox/data/repos/github.com/sqrtox/unln)",
+      "license": "MIT",
+      "license_file": null,
+      "description": "This tool can erase only symbolic links, which is a bit safer than unlink.",
+      "source": null,
+      "dependencies": [
+        {
+          "name": "clap",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^4.3.23",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [
+            "derive"
+          ],
+          "target": null,
+          "registry": null
+        },
+        {
+          "name": "colored",
+          "source": "registry+https://github.com/rust-lang/crates.io-index",
+          "req": "^2.0.4",
+          "kind": null,
+          "rename": null,
+          "optional": false,
+          "uses_default_features": true,
+          "features": [],
+          "target": null,
+          "registry": null
+        }
+      ],
+      "targets": [
+        {
+          "kind": [
+            "bin"
+          ],
+          "crate_types": [
+            "bin"
+          ],
+          "name": "unln",
+          "src_path": "/home/sqrtox/data/repos/github.com/sqrtox/unln/src/main.rs",
+          "edition": "2021",
+          "doc": true,
+          "doctest": false,
+          "test": true
+        }
+      ],
+      "features": {},
+      "manifest_path": "/home/sqrtox/data/repos/github.com/sqrtox/unln/Cargo.toml",
+      "metadata": null,
+      "publish": null,
+      "authors": [
+        "sqrtox"
+      ],
+      "categories": [],
+      "keywords": [],
+      "readme": "README.md",
+      "repository": null,
+      "homepage": null,
+      "documentation": null,
+      "edition": "2021",
+      "links": null,
+      "default_run": null,
+      "rust_version": null
+    }
+  ],
+  "workspace_members": [
+    "unln 0.1.0 (path+file:///home/sqrtox/data/repos/github.com/sqrtox/unln)"
+  ],
+  "workspace_default_members": [
+    "unln 0.1.0 (path+file:///home/sqrtox/data/repos/github.com/sqrtox/unln)"
+  ],
+  "resolve": null,
+  "target_directory": "/home/sqrtox/data/repos/github.com/sqrtox/unln/target",
+  "version": 1,
+  "workspace_root": "/home/sqrtox/data/repos/github.com/sqrtox/unln",
+  "metadata": null
+}

@@ -10,6 +10,16 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  crate-metadata:
+    name: Extract crate metadata
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v3
+      - name: Extract create infomation
+        id: crate_medata
+        run: |
+          cargo metadata --no-deps --format-version 1 | jq -r '"name=" + .packages[0].name' | tee -a $GITHUB_OUTPUT
+
   build:
     strategy:
       matrix:
@@ -18,9 +28,8 @@ jobs:
         include:
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
-
     runs-on: ${{ matrix.os }}
-
+    needs: crate-metadata
     steps:
       - name: Setup code
         uses: actions/checkout@v2
@@ -52,12 +61,12 @@ jobs:
       - name: Package for linux-musl
         if: matrix.target == 'x86_64-unknown-linux-musl'
         run: |
-          zip --junk-paths rc-${{ matrix.target }} target/${{ matrix.target }}/release/rc
+          zip --junk-paths ${{ needs.crate-metadata.outputs.name }}-${{ matrix.target }} target/${{ matrix.target }}/release/${{ needs.crate-metadata.outputs.name }}
   
       - uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.target }}
-          path: rc-${{ matrix.target }}.zip
+          path: ${{ needs.crate-metadata.outputs.name }}-${{ matrix.target }}.zip
 
   create-release:
     needs: [build]
@@ -101,6 +110,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.upload-url.outputs.url }}
-          asset_path: ./build-${{ matrix.target }}/rc-${{ matrix.target }}.zip
-          asset_name: rc-${{ matrix.target }}.zip
+          asset_path: ./build-${{ matrix.target }}/${{ needs.crate-metadata.outputs.name }}-${{ matrix.target }}.zip
+          asset_name: ${{ needs.crate-metadata.outputs.name }}-${{ matrix.target }}.zip
           asset_content_type: application/zip
