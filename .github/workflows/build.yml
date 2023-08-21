@@ -16,9 +16,11 @@ jobs:
     steps: 
       - uses: actions/checkout@v3
       - name: Extract create infomation
-        id: crate_medata
+        id: crate_metadata
         run: |
           cargo metadata --no-deps --format-version 1 | jq -r '"name=" + .packages[0].name' | tee -a $GITHUB_OUTPUT
+    outputs:
+      name: ${{ steps.crate_metadata.outputs.name }}
 
   build:
     strategy:
@@ -66,7 +68,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.target }}
-          path: ${{ needs.crate-metadata.outputs.name }}-${{ matrix.target }}.zip
+          path: ${{ needs.crate_metadata.outputs.name }}-${{ matrix.target }}.zip
 
   create-release:
     needs: [build]
