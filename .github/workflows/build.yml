@@ -31,7 +31,7 @@ jobs:
     needs: crate_metadata
     steps:
       - name: Setup code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install musl tools
         if: matrix.target == 'x86_64-unknown-linux-musl'
@@ -44,7 +44,7 @@ jobs:
           rustup component add rustfmt
       - run: cargo fmt --all -- --check
       - run: cargo clippy -- -D warnings
-      - uses: Swatinem/rust-cache@version
+      - uses: Swatinem/rust-cache@v2
 
       - if: matrix.target == 'x86_64-unknown-linux-musl'
         run: |
