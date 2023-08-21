@@ -71,14 +71,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: create_release
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: true
+          tag: ${{ github.ref_name }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --generate-notes
       - run: |
           echo '${{ steps.create_release.outputs.upload_url }}' > release_upload_url.txt
       - uses: actions/upload-artifact@v1
@@ -98,7 +98,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v1
         with:
-          name: create-release
+          name: create_release
       - id: upload-url
         run: |
           echo "url=$(cat create-release/release_upload_url.txt)" >> $GITHUB_OUTPUT
