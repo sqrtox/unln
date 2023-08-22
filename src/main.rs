@@ -41,10 +41,16 @@ fn main() {
 
     if !file_type.is_symlink() {
         println!(
-            "{} The specified name is not a symbolic link\n\n {} A slash at the end of a symbolic link name will give a different meaning",
-            color::error(),
-            color::note()
+            "{} The specified name is not a symbolic link",
+            color::error()
         );
+
+        if filename.ends_with("/") {
+            println!(
+                "\n {} A slash at the end of a symbolic link name will give a different meaning",
+                color::note()
+            );
+        }
 
         return;
     }
