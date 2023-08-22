@@ -45,7 +45,7 @@ fn main() {
             color::error()
         );
 
-        if filename.ends_with("/") {
+        if filename.ends_with('/') {
             println!(
                 "\n {} A slash at the end of a symbolic link name will give a different meaning",
                 color::note()
