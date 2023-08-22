@@ -17,7 +17,7 @@ jobs:
         run: |
           metadata=`cargo metadata --no-deps --format-version 1`
           echo $metadata | jq -r '"name=" + .packages[0].name' | tee -a $GITHUB_OUTPUT
-          echo $metadata | jq -r '"version"= + .packages[0].version' | tee -a $GITHUB_OUTPUT
+          echo $metadata | jq -r '"version=" + .packages[0].version' | tee -a $GITHUB_OUTPUT
     outputs:
       name: ${{ steps.crate_metadata.outputs.name }}
       version: ${{ steps.crate_metadata.outputs.version }}
