@@ -15,9 +15,12 @@ jobs:
       - name: Extract crate information
         id: crate_metadata
         run: |
-          cargo metadata --no-deps --format-version 1 | jq -r '"name=" + .packages[0].name' | tee -a $GITHUB_OUTPUT
+          metadata=`cargo metadata --no-deps --format-version 1`
+          echo $metadata | jq -r '"name=" + .packages[0].name' | tee -a $GITHUB_OUTPUT
+          echo $metadata | jq -r '"version"= + .packages[0].version' | tee -a $GITHUB_OUTPUT
     outputs:
       name: ${{ steps.crate_metadata.outputs.name }}
+      version: ${{ steps.crate_metadata.outputs.version }}
 
   build:
     strategy:
@@ -54,7 +57,9 @@ jobs:
         run: cargo test
 
       - name: Build
-        run: cargo build --release --target=${{ matrix.target }}
+        run: |
+          cargo build --release --target=${{ matrix.target }}
+          strip target/${{ matrix.target }}/release/${{ needs.crate_metadata.outputs.name }}
 
       - name: Package for linux-musl
         if: matrix.target == 'x86_64-unknown-linux-musl'
@@ -75,6 +80,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           tag_name: ${{ github.ref }}
           name: Release ${{ github.ref }}
@@ -112,5 +118,5 @@ jobs:
         with:
           upload_url: ${{ steps.upload_url.outputs.url }}
           asset_path: ./build-${{ matrix.target }}/${{ needs.crate_metadata.outputs.name }}-${{ matrix.target }}.zip
-          asset_name: ${{ needs.crate_metadata.outputs.name }}-${{ matrix.target }}.zip
+          asset_name: ${{ needs.crate_metadata.outputs.name }}-v${{ needs.crate_metadata.outputs.version }}-${{ matrix.target }}.zip
           asset_content_type: application/zip
