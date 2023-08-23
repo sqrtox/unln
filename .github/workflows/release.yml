@@ -27,9 +27,12 @@ jobs:
       matrix:
         target:
           - x86_64-unknown-linux-musl
+          - x86_64-pc-windows-msvc
         include:
           - target: x86_64-unknown-linux-musl
             os: ubuntu-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     needs: crate_metadata
     steps:
@@ -66,6 +69,11 @@ jobs:
         run: |
           zip --junk-paths ${{ needs.crate_metadata.outputs.name }}-${{ matrix.target }} target/${{ matrix.target }}/release/${{ needs.crate_metadata.outputs.name }}
 
+      - name: Package for windows
+        if: matrix.target == 'x86_64-pc-windows-msvc'
+        run: |
+          powershell Compress-Archive -Path target/${{ matrix.target }}/release/${{ needs.crate_metadata.outputs.name }}.exe -DestinationPath ${{ needs.crate_metadata.outputs.name }}-${{ matrix.target }}.zip
+
       - uses: actions/upload-artifact@v2
         with:
           name: build-${{ matrix.target }}
@@ -100,6 +108,7 @@ jobs:
       matrix:
         target:
           - x86_64-unknown-linux-musl
+          - x86_64-pc-windows-msvc
     needs:
       - create_release
       - crate_metadata
